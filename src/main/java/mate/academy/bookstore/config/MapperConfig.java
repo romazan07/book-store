@@ -4,7 +4,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.NullValueCheckStrategy;
 
 @org.mapstruct.MapperConfig(
-        componentModel = "spring", // всі мапери сприйматимуться, як біни
+        componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         implementationPackage = "<PACKAGE_NAME>.impl"
