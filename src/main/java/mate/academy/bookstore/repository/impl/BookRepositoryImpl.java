@@ -2,6 +2,7 @@ package mate.academy.bookstore.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
@@ -44,13 +45,16 @@ public class BookRepositoryImpl implements BookRepository {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             return entityManager.createQuery("from Book", Book.class).getResultList();
         } catch (Exception e) {
-            throw new DataProcessingException("Can't find all the books");
+            throw new EntityNotFoundException("Can't find all the books");
         }
     }
 
     @Override
     public Optional<Book> findById(Long id) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return Optional.ofNullable(entityManager.find(Book.class, id));
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return Optional.ofNullable(entityManager.find(Book.class, id));
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Can't find the book with id = " + id, e);
+        }
     }
 }
