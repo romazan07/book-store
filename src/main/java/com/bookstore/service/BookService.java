@@ -1,8 +1,8 @@
-package mate.academy.bookstore.service;
+package com.bookstore.service;
 
+import com.bookstore.dto.BookDto;
+import com.bookstore.dto.CreateBookRequestDto;
 import java.util.List;
-import mate.academy.bookstore.dto.BookDto;
-import mate.academy.bookstore.dto.CreateBookRequestDto;
 
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
@@ -14,4 +14,6 @@ public interface BookService {
     List<BookDto> findByTitle(String title);
 
     void deleteById(Long id);
+
+    BookDto update(Long id, CreateBookRequestDto bookRequestDto);
 }

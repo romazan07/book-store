@@ -1,31 +1,26 @@
-package mate.academy.bookstore.controller;
+package com.bookstore.controller;
 
+import com.bookstore.dto.BookDto;
+import com.bookstore.dto.CreateBookRequestDto;
+import com.bookstore.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore.dto.BookDto;
-import mate.academy.bookstore.dto.CreateBookRequestDto;
-import mate.academy.bookstore.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
-
-    @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
-        return bookService.save(bookDto);
-    }
 
     @GetMapping
     public List<BookDto> getAll() {
@@ -37,9 +32,15 @@ public class BookController {
         return bookService.findById(id);
     }
 
-    @GetMapping("/by-title")
-    public List<BookDto> findByTitle(@RequestParam String title) {
-        return bookService.findByTitle(title);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
+        return bookService.save(bookDto);
+    }
+
+    @PutMapping("/{id}")
+    public BookDto update(@PathVariable Long id, @RequestBody CreateBookRequestDto bookRequestDto) {
+        return bookService.update(id, bookRequestDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
