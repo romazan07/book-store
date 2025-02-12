@@ -2,6 +2,6 @@ package com.bookstore.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String entity, Long id) {
-        super(entity + " not found with id = " + id);
+        super("The " + entity + " not found with id = " + id);
     }
 }
