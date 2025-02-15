@@ -7,21 +7,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class BookSpecificationBuilderImpl implements SpecificationBuilder<Book> {
+    private static final String AUTHOR_KEY = "author";
+    private static final String TITLE_KEY = "title";
     private final BookSpecificationProviderManagerImpl bookSpecificationProviderManager;
 
     @Override
     public Specification<Book> build(SearchBookParameters searchBookParameters) {
         Specification<Book> spec = Specification.where(null);
         if (searchBookParameters.authors() != null && searchBookParameters.authors().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("author")
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(AUTHOR_KEY)
                     .getSpecification(searchBookParameters.authors()));
         }
         if (searchBookParameters.titlePart() != null
                 && searchBookParameters.titlePart().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("title")
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(TITLE_KEY)
                     .getSpecification(searchBookParameters.titlePart()));
         }
         return spec;

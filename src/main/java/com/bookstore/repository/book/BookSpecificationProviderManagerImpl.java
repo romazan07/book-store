@@ -7,8 +7,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class BookSpecificationProviderManagerImpl implements SpecificationProviderManager<Book> {
     private final List<SpecificationProvider<Book>> specificationProviderList;
 

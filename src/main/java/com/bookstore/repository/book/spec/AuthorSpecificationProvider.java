@@ -2,10 +2,6 @@ package com.bookstore.repository.book.spec;
 
 import com.bookstore.model.Book;
 import com.bookstore.repository.SpecificationProvider;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import java.util.Arrays;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -18,12 +14,7 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
     }
 
     public Specification<Book> getSpecification(String[] params) {
-        return new Specification<Book>() {
-            @Override
-            public Predicate toPredicate(Root<Book> root, CriteriaQuery<?> query,
-                                         CriteriaBuilder criteriaBuilder) {
-                return root.get("author").in(Arrays.stream(params).toArray());
-            }
-        };
+        return (root, query, criteriaBuilder) ->
+                root.get("author").in(Arrays.stream(params).toArray());
     }
 }
