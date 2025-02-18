@@ -1,4 +1,4 @@
-package mate.academy.bookstore.model;
+package com.bookstore.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,11 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 @Entity
 @Getter
 @Setter
@@ -28,4 +32,6 @@ public class Book {
     private BigDecimal price;
     private String description;
     private String coverImage;
+    @Column(nullable = false, name = "is_deleted", columnDefinition = "TINYINT(1)")
+    private boolean isDeleted = false;
 }
