@@ -7,13 +7,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ValidationPassword.class)
+@Constraint(validatedBy = FieldMatchValidator.class)
 @Target({ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldMatch {
-    String message() default "The password and the repeatPassword aren't the same";
+    String first();
+
+    String second();
+
+    String message() default "The fields don't match";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
 }

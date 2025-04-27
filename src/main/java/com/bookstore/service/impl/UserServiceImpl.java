@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
             throws RegistrationException {
         String email = userRegistrationRequestDto.getEmail();
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.existsByEmail(email)) {
             throw new RegistrationException("The user with the email: " + email
                     + " already exists");
         }
