@@ -18,13 +18,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handelRegistrationException(RegistrationException ex) {
+        Map<String, Object> body = createBody(HttpStatus.CONFLICT, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Not Found");
-        body.put("message", ex.getMessage());
+        Map<String, Object> body = createBody(HttpStatus.NOT_FOUND, ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
@@ -35,13 +37,10 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatusCode status,
             WebRequest request
     ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorsMessage)
                 .toList();
-        body.put("errors", errors);
+        Map<String, Object> body = createBody(HttpStatus.valueOf(status.value()), errors);
         return ResponseEntity.badRequest().body(body);
     }
 
@@ -52,5 +51,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             return field + " " + defaultMessage;
         }
         return e.getDefaultMessage();
+    }
+
+    private Map<String, Object> createBody(HttpStatus status, Object message) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase().toLowerCase());
+        body.put("message", message);
+        return body;
     }
 }
