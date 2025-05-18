@@ -20,5 +20,4 @@ public @interface FieldMatch {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }

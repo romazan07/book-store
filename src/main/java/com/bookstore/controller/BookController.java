@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new book",
             description = "Creates and returns a new book based on the provided data")
     @ApiResponse(responseCode = "201", description = "Book created successfully")
@@ -57,6 +59,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Update book by ID", description = "Updates an existing book")
     @ApiResponse(responseCode = "200", description = "Book updated successfully")
     @ApiResponse(responseCode = "404", description = "Book not found")
@@ -73,6 +76,7 @@ public class BookController {
         return bookService.search(searchBookParameters);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Delete book by ID", description = "Deletes a book by its ID")
     @ApiResponse(responseCode = "204", description = "Book deleted successfully")
     @ApiResponse(responseCode = "404", description = "Book not found")

@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-user-role
+      author: Roman
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "admin@gmail.com" }
+              - column: { name: password, value: "$2a$10$SnnRTjirYS57jkdO9plFuefXuVyef9EtiTozqhUIqlMrzXG7gxlUe" }
+              - column: { name: first_name, value: "admin" }
+              - column: { name: last_name, value: "last" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "bob@gmail.com" }
+              - column: { name: password, value: "$2a$10$SnnRTjirYS57jkdO9plFuefXuVyef9EtiTozqhUIqlMrzXG7gxlUe" }
+              - column: { name: first_name, value: "bob" }
+              - column: { name: last_name, value: "miller" }
+
+  - changeSet:
+      id: insert-roles
+      author: Roman
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: "ROLE_ADMIN" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: "ROLE_USER" }
+
+  - changeSet:
+      id: link-user-role
+      author: Roman
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column: { name: user_id, value: 1 }
+              - column: { name: role_id, value: 1 }
+        - insert:
+            tableName: users_roles
+            columns:
+              - column: { name: user_id, value: 2 }
+              - column: { name: role_id, value: 2 }
+                
