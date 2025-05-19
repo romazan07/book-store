@@ -59,7 +59,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update book by ID", description = "Updates an existing book")
     @ApiResponse(responseCode = "200", description = "Book updated successfully")
     @ApiResponse(responseCode = "404", description = "Book not found")
@@ -76,7 +76,7 @@ public class BookController {
         return bookService.search(searchBookParameters);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete book by ID", description = "Deletes a book by its ID")
     @ApiResponse(responseCode = "204", description = "Book deleted successfully")
     @ApiResponse(responseCode = "404", description = "Book not found")

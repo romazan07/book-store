@@ -7,4 +7,6 @@ import com.bookstore.exception.RegistrationException;
 public interface UserService {
     UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
             throws RegistrationException;
+
+    void deleteById(Long id);
 }
