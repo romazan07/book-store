@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization").trim();
+        String bearerToken = Optional.ofNullable(request.getHeader("Authorization"))
+                .map(String::trim)
+                .orElse(null);
+
         if (StringUtils.hasText(bearerToken)
                 && StringUtils.startsWithIgnoreCase(bearerToken, "bearer")) {
             return bearerToken.substring(7);
