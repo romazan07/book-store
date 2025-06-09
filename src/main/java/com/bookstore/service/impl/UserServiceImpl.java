@@ -4,10 +4,14 @@ import com.bookstore.dto.user.UserRegistrationRequestDto;
 import com.bookstore.dto.user.UserResponseDto;
 import com.bookstore.exception.RegistrationException;
 import com.bookstore.mapper.UserMapper;
+import com.bookstore.model.Role;
 import com.bookstore.model.User;
+import com.bookstore.repository.RoleRepository;
 import com.bookstore.repository.UserRepository;
 import com.bookstore.service.UserService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,16 +19,21 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
+    public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
-        String email = userRegistrationRequestDto.getEmail();
-        if (userRepository.existsByEmail(email)) {
-            throw new RegistrationException("The user with the email: " + email
+        if (userRepository.existsByEmail(requestDto.getEmail())) {
+            throw new RegistrationException("The user with the email: " + requestDto.getEmail()
                     + " already exists");
         }
-        User userMapperModel = userMapper.toModel(userRegistrationRequestDto);
-        return userMapper.toDto(userRepository.save(userMapperModel));
+        User user = userMapper.toModel(requestDto);
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        Role role = roleRepository.findByName(Role.RoleName.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        user.setRoles(Set.of(role));
+        return userMapper.toDto(userRepository.save(user));
     }
 }
