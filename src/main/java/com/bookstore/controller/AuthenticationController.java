@@ -41,7 +41,7 @@ public class AuthenticationController {
     @ApiResponse(responseCode = "200", description = "Login successful. JWT token returned")
     @ApiResponse(responseCode = "401", description = "Unauthorized. Invalid username or password")
     @PostMapping("/login")
-    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto requestDto) {
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.authenticate(requestDto);
     }
 }
