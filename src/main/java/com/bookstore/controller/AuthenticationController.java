@@ -1,8 +1,11 @@
 package com.bookstore.controller;
 
+import com.bookstore.dto.user.UserLoginRequestDto;
+import com.bookstore.dto.user.UserLoginResponseDto;
 import com.bookstore.dto.user.UserRegistrationRequestDto;
 import com.bookstore.dto.user.UserResponseDto;
 import com.bookstore.exception.RegistrationException;
+import com.bookstore.security.AuthenticationService;
 import com.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication", description = "Endpoints for authentication user")
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     @Operation(summary = "Register a new user", description = "Creates a new user account")
@@ -30,5 +34,14 @@ public class AuthenticationController {
             @RequestBody @Valid UserRegistrationRequestDto userRegistrationRequestDto)
             throws RegistrationException {
         return userService.register(userRegistrationRequestDto);
+    }
+
+    @Operation(summary = "User login", description = "Authenticates the user and returns"
+            + " a JWT token upon successful login")
+    @ApiResponse(responseCode = "200", description = "Login successful. JWT token returned")
+    @ApiResponse(responseCode = "401", description = "Unauthorized. Invalid username or password")
+    @PostMapping("/login")
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
+        return authenticationService.authenticate(requestDto);
     }
 }
