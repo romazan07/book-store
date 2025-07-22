@@ -77,7 +77,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "400", description = "Invalid input date or ID")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Category not found")
-    public ResponseCategoryDto updateCategory(@PathVariable Long id,
+    public ResponseCategoryDto updateCategory(@PathVariable @Positive Long id,
                                               @RequestBody @Valid CreateCategoryDto categoryDto) {
         return categoryService.update(id, categoryDto);
     }
@@ -90,7 +90,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "400", description = "Invalid ID")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Category not found")
-    public void deleteCategory(@PathVariable Long id) {
+    public void deleteCategory(@PathVariable @Positive Long id) {
         categoryService.deleteById(id);
     }
 
@@ -105,7 +105,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "404", description = "Category not found")
     public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             Pageable pageable,
-            @PathVariable Long id
+            @PathVariable @Positive Long id
     ) {
         return categoryService.getBooksByCategoryId(pageable, id);
     }
