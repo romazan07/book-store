@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: add-users-roles-table
+      id: create-users-roles-table
       author: Roman
       changes:
         - createTable:
